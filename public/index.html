@@ -200,7 +200,8 @@ img{display:block}
 @media (max-width:420px){
   .actions .btn{flex:1 1 auto}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.media img{transition:object-position .58s cubic-bezier(.2,.75,.25,1),opacity .35s ease}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 
 /* One opening sequence; the class is removed when it finishes. */
 @media (prefers-reduced-motion:no-preference){
@@ -288,7 +289,44 @@ html.entry-active .svc-body .cbody{animation:entry-opacity .55s cubic-bezier(.2,
   const rows=[...document.querySelectorAll('.row')];
   const card=$('svc-card'), body=document.querySelector('.svc-body');
   const mq=matchMedia('(max-width:899.98px)');
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let cur=0;
+  let cardAnimations=[];
+  const slotAnimations=new Map();
+  const canAnimate=()=>!reduced.matches&&!document.documentElement.classList.contains('entry-active');
+  function stopMotion(){
+    cardAnimations.forEach(a=>a.cancel());cardAnimations=[];
+    for(const [slot,a] of slotAnimations){
+      a.cancel();slot.style.removeProperty('display');slot.style.removeProperty('overflow');
+    }
+    slotAnimations.clear();
+  }
+  function play(node,frames,duration,delay=0){
+    const a=node.animate(frames,{duration,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});
+    cardAnimations.push(a);
+    a.finished.then(()=>{cardAnimations=cardAnimations.filter(x=>x!==a)},()=>{});
+  }
+  function animateCard(){
+    const rise=[{opacity:0,transform:'translateY(9px)'},{opacity:1,transform:'none'}];
+    play($('svc-img'),[{opacity:.55,transform:'scale(1.025)'},{opacity:1,transform:'none'}],520);
+    play($('svc-ctitle'),[{opacity:0,transform:'translateY(10px)',clipPath:'inset(0 0 100% 0)'},{opacity:1,transform:'none',clipPath:'inset(0)'}],480,45);
+    play($('svc-cpara'),rise,430,95);
+    play($('svc-specs'),rise,430,135);
+    play(card.querySelector('.actions'),rise,430,165);
+    if(!$('svc-badge').hidden)play($('svc-badge'),[{opacity:0},{opacity:1}],300,150);
+  }
+  function animateSlot(slot,from,to,opening){
+    slot.style.display='block';slot.style.overflow='hidden';
+    const start={height:from+'px',paddingTop:opening?'0px':'12px',paddingBottom:opening?'0px':'18px',opacity:opening?.7:1};
+    const end={height:to+'px',paddingTop:opening?'12px':'0px',paddingBottom:opening?'18px':'0px',opacity:opening?1:0};
+    const a=slot.animate([start,end],{duration:440,easing:'cubic-bezier(.2,.75,.25,1)',fill:'both'});
+    slotAnimations.set(slot,a);
+    const finish=()=>{
+      if(slotAnimations.get(slot)!==a)return;
+      slotAnimations.delete(slot);slot.style.removeProperty('display');slot.style.removeProperty('overflow');a.cancel();
+    };
+    a.finished.then(finish,finish);
+  }
   function place(){
     if(mq.matches){rows[cur].querySelector('.slot').appendChild(card)}
     else if(card.parentElement!==body){body.appendChild(card)}
@@ -303,10 +341,26 @@ html.entry-active .svc-body .cbody{animation:entry-opacity .55s cubic-bezier(.2,
   }
   function select(i){
     if(i===cur && !mq.matches) return;
+    stopMotion();
     if(i===cur && mq.matches){ /* accordion: collapse/expand */
-      const open=rows[i].classList.toggle('active');rows[i].querySelector('.row-btn').setAttribute('aria-expanded',open);return;}
+      const slot=rows[i].querySelector('.slot');
+      const oldHeight=slot.getBoundingClientRect().height;
+      const open=rows[i].classList.toggle('active');rows[i].querySelector('.row-btn').setAttribute('aria-expanded',open);
+      if(canAnimate())animateSlot(slot,open?0:oldHeight,open?slot.getBoundingClientRect().height:0,open);
+      return;
+    }
+    const oldSlot=rows[cur].querySelector('.slot');
+    const oldOpen=mq.matches&&rows[cur].classList.contains('active');
+    const oldHeight=oldOpen?oldSlot.getBoundingClientRect().height:0;
     rows.forEach((r,k)=>{r.classList.toggle('active',k===i);r.querySelector('.row-btn').setAttribute('aria-expanded',k===i)});
     cur=i;render(i);place();
+    if(!canAnimate())return;
+    if(mq.matches){
+      if(oldOpen)animateSlot(oldSlot,oldHeight,0,false);
+      const newSlot=rows[i].querySelector('.slot');
+      animateSlot(newSlot,0,newSlot.getBoundingClientRect().height,true);
+    }
+    animateCard();
   }
   rows.forEach((r,k)=>r.querySelector('.row-btn').addEventListener('click',()=>select(k)));
   document.querySelector('.list').addEventListener('keydown',e=>{
@@ -316,7 +370,7 @@ html.entry-active .svc-body .cbody{animation:entry-opacity .55s cubic-bezier(.2,
     k=e.key==='Home'?0:e.key==='End'?btns.length-1:(k+(e.key==='ArrowDown'?1:-1)+btns.length)%btns.length;
     btns[k].focus();
   });
-  mq.addEventListener('change',()=>{rows.forEach((r,k)=>r.classList.toggle('active',k===cur));place()});
+  mq.addEventListener('change',()=>{stopMotion();rows.forEach((r,k)=>r.classList.toggle('active',k===cur));place()});
   place();
 })();
 </script>
