@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Services — One partner for every leg of the journey</title>
+<style>
+/* ───────────────────────── Fonts (embedded, offline) ───────────────────────── */
+@font-face{font-family:"Onest";font-style:normal;font-weight:100 900;font-display:block;
+  src:url(assets/font-01.woff2) format("woff2");}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:block;
+  src:url(assets/font-02.woff2) format("woff2");}
+
+/* ───────────────────────── Tokens (sampled from reference) ───────────────────────── */
+:root{
+  --bg:#F5F6F8;
+  --surface:#FFFFFF;
+  --ink:#0B0C0E;
+  --ink-2:#6A6C71;          /* lede / sub-lines / paragraph */
+  --ink-3:#5E6065;          /* mono spec keys */
+  --ink-num:#6E7074;        /* [02] indices */
+  --line:#DCDDE1;           /* list separators */
+  --line-card:#DCDEE1;      /* card hairline */
+  --line-spec:#E1E2E5;      /* spec separators */
+  --accent:#1D42FE;         /* active row, eyebrow square, badge dot */
+  --btn:#0E1116;
+  --sans:"Onest",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* Reference artboard: 1481 × 1062.
+     --u is "one reference pixel". The limiting viewport axis sets the scale;
+     the other axis is absorbed by flexible regions (card width / photo height),
+     so the section always fills the viewport with no letterboxing.            */
+  --u: min(100vw / 1481, max(100svh / 1062, 100vw / 1720));
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg)}
+body{color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+a{color:inherit;text-decoration:none}
+img{display:block}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ═════════════════════════ STAGE MODE (≥1120px): pixel-exact, proportional ═════════════════════════ */
+@media (min-width:1120px){
+  .svc{
+    --c:var(--u);
+    min-height:100svh;
+    display:flex;flex-direction:column;
+    padding:calc(var(--c)*96) calc(var(--c)*42) calc(var(--c)*60.3) calc(var(--c)*45);
+  }
+  .eyebrow{display:flex;align-items:center;gap:calc(var(--c)*9.6);height:calc(var(--c)*12);
+    font:600 calc(var(--c)*12)/1 var(--mono);letter-spacing:.065em;text-transform:uppercase;margin-left:calc(var(--c)*.5)}
+  .eyebrow i{width:calc(var(--c)*10);height:calc(var(--c)*10);background:var(--accent);flex:none}
+
+  .svc-head{display:flex;align-items:flex-end;justify-content:space-between;margin-top:calc(var(--c)*25.2)}
+  .svc-head h1{margin:0 0 0 calc(var(--c)*2);font-weight:560;font-size:calc(var(--c)*63.4);line-height:calc(var(--c)*67);letter-spacing:-.037em}
+  .lede{margin:0 calc(var(--c)*-1) calc(var(--c)*1) 0;width:calc(var(--c)*413);flex:none;font-weight:420;font-size:calc(var(--c)*17.42);line-height:calc(var(--c)*28);color:var(--ink-2);letter-spacing:-.003em}
+
+  .svc-body{flex:1;display:flex;gap:calc(var(--c)*23.5);margin-top:calc(var(--c)*53.5);min-height:0}
+
+  /* list */
+  .list{width:calc(var(--c)*431.5);flex:none;margin:calc(var(--c)*-1.3) 0 0;padding:0;list-style:none;align-self:flex-start}
+  .row{position:relative;height:calc(var(--c)*97.6)}
+  .row::after{content:"";position:absolute;left:0;right:0;bottom:0;height:max(1px,calc(var(--c)*1));background:var(--line)}
+  .row-btn{position:relative;z-index:1;display:flex;align-items:center;width:100%;height:100%;
+    padding:calc(var(--c)*1.3) calc(var(--c)*22) 0 calc(var(--c)*19.5);border-radius:calc(var(--c)*3)}
+  .row.active .row-btn{padding-top:calc(var(--c)*5.3)}
+  .row-btn::before{content:"";position:absolute;inset:calc(var(--c)*1.3) 0 0 0;border-radius:calc(var(--c)*3);background:var(--accent);
+    opacity:0;transform:scaleY(.96);transition:opacity .25s ease,transform .25s ease;z-index:-1}
+  .row.active .row-btn::before{opacity:1;transform:none}
+  .row.active::after{opacity:0}
+  .num{font:500 calc(var(--c)*12.4)/1 var(--mono);color:var(--ink-num);letter-spacing:.11em;width:calc(var(--c)*53);flex:none}
+  .rt{flex:1;min-width:0}
+  .rt b{display:block;position:relative;top:calc(var(--c)*-1.8);font-weight:580;font-size:calc(var(--c)*24);line-height:calc(var(--c)*30);letter-spacing:-.025em}
+  .rt span{display:block;font-weight:420;font-size:calc(var(--c)*15.38);line-height:calc(var(--c)*20);color:var(--ink-2);margin-top:calc(var(--c)*.5);letter-spacing:-.005em}
+  .ic{position:relative;width:calc(var(--c)*13);height:calc(var(--c)*13);flex:none}
+  .ic::before,.ic::after{content:"";position:absolute;background:currentColor;border-radius:1px}
+  .ic::before{left:0;right:0;top:50%;height:calc(var(--c)*2);transform:translateY(-50%)}
+  .ic::after{top:0;bottom:0;left:50%;width:calc(var(--c)*2);transform:translateX(-50%);transition:transform .25s ease}
+  .row.active .ic::after{transform:translateX(-50%) scaleY(0)}
+  .row.active .ic{top:calc(var(--c)*-1.5)}
+  .row.active .row-btn{color:#fff}
+  .row.active .num{color:rgba(255,255,255,.92)}
+  .row.active .rt span{color:rgba(255,255,255,.86)}
+  .row:not(.active) .row-btn:hover .rt b{color:var(--accent)}
+  .row-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* card */
+  .card{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--surface);
+    border:max(1px,calc(var(--c)*1)) solid var(--line-card);border-radius:calc(var(--c)*6);
+    padding:calc(var(--c)*12.9) calc(var(--c)*13.5) calc(var(--c)*25.3)}
+  .media{position:relative;flex:1;min-height:calc(var(--c)*300);border-radius:calc(var(--c)*4);overflow:hidden;background:#cfd3d8}
+  .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transition:opacity .35s ease}
+  .badge{position:absolute;left:calc(var(--c)*15);bottom:calc(var(--c)*18.2);display:flex;align-items:center;gap:calc(var(--c)*6);
+    height:calc(var(--c)*29);padding:0 calc(var(--c)*11.5);background:rgba(255,255,255,.977);-webkit-backdrop-filter:blur(8px) saturate(1.3);backdrop-filter:blur(8px) saturate(1.3);border-radius:calc(var(--c)*4);
+    font:600 calc(var(--c)*11)/1 var(--mono);letter-spacing:.01em;text-transform:uppercase;white-space:nowrap;transition:opacity .25s ease}
+  .badge i{width:calc(var(--c)*8.5);height:calc(var(--c)*8.5);border-radius:50%;background:var(--accent);flex:none}
+  .badge[hidden]{display:flex;opacity:0;pointer-events:none}
+
+  .cbody{display:grid;grid-template-columns:minmax(0,1fr) calc(var(--c)*315);column-gap:calc(var(--c)*30);
+    padding:calc(var(--c)*25) calc(var(--c)*13.5) 0 calc(var(--c)*15)}
+  .cmain{min-width:0}
+  .ctitle{margin:0;font-weight:550;font-size:calc(var(--c)*33.6);line-height:calc(var(--c)*40);letter-spacing:-.035em;word-spacing:-.13em}
+  .cpara{margin:calc(var(--c)*13) 0 0;font-weight:420;max-width:calc(var(--c)*537);font-size:calc(var(--c)*16.0);line-height:calc(var(--c)*26.5);color:var(--ink-2);letter-spacing:-.004em}
+  .actions{display:flex;align-items:center;gap:calc(var(--c)*10.7);margin-top:calc(var(--c)*18)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;height:calc(var(--c)*44.3);border-radius:calc(var(--c)*4);
+    font-weight:500;font-size:calc(var(--c)*16.0);letter-spacing:-.012em;white-space:nowrap;transition:background .2s ease,color .2s ease,transform .2s ease}
+  .btn-primary{background:var(--btn);color:#fff;padding:0 calc(var(--c)*18.5) 0 calc(var(--c)*17.2);gap:calc(var(--c)*11)}
+  .btn-primary svg{width:calc(var(--c)*15);height:calc(var(--c)*12.5);flex:none;transition:transform .2s ease}
+  .btn-primary:hover svg{transform:translateX(calc(var(--c)*3))}
+  .btn-primary:hover{background:var(--accent)}
+  .btn-ghost{border:max(1px,calc(var(--c)*1.2)) solid #15171B;padding:0 calc(var(--c)*20);height:calc(var(--c)*46.2);background:#fff}
+  .btn-ghost:hover{background:var(--ink);color:#fff}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .specs{margin:0;padding:0;align-self:start;margin-top:calc(var(--c)*-1)}
+  .spec{display:flex;align-items:center;justify-content:space-between;height:calc(var(--c)*45.6);padding:0 calc(var(--c)*2) calc(var(--c)*4) calc(var(--c)*3)}
+  .spec + .spec{border-top:max(1px,calc(var(--c)*1)) solid var(--line-spec)}
+  .spec dt{font:450 calc(var(--c)*11)/1 var(--mono);letter-spacing:.02em;text-transform:uppercase;color:var(--ink-3)}
+  .spec dd{margin:0;position:relative;top:calc(var(--c)*1);font-weight:440;font-size:calc(var(--c)*15.3);line-height:1;letter-spacing:-.012em;text-align:right}
+}
+
+/* ═════════════════════════ COMPACT MODES (<1120px): fluid reflow ═════════════════════════ */
+@media (max-width:1119.98px){
+  .svc{min-height:100svh;display:flex;flex-direction:column;
+    padding:clamp(40px,7vw,72px) clamp(18px,4.5vw,40px) clamp(28px,6vw,56px)}
+  .eyebrow{display:flex;align-items:center;gap:9px;font:500 12px/1 var(--mono);letter-spacing:.075em;text-transform:uppercase}
+  .eyebrow i{width:10px;height:10px;background:var(--accent)}
+  .svc-head{display:grid;gap:clamp(14px,2.4vw,22px);margin-top:clamp(18px,3vw,28px)}
+  .svc-head h1{margin:0;font-weight:500;font-size:clamp(36px,6.6vw,60px);line-height:1.05;letter-spacing:-.035em;text-wrap:balance}
+  .lede{margin:0;max-width:46ch;font-size:clamp(15.5px,1.9vw,17.5px);line-height:1.6;color:var(--ink-2)}
+  .svc-body{flex:1;display:grid;grid-template-columns:minmax(260px,38%) 1fr;gap:20px;margin-top:clamp(28px,5vw,48px);align-items:start}
+
+  .list{margin:0;padding:0;list-style:none}
+  .row{position:relative;border-bottom:1px solid var(--line)}
+  .row.active{border-bottom-color:transparent}
+  .row-btn{position:relative;z-index:1;display:flex;align-items:center;width:100%;min-height:84px;padding:14px 18px;border-radius:3px;gap:0}
+  .row-btn::before{content:"";position:absolute;inset:0;border-radius:3px;background:var(--accent);opacity:0;transition:opacity .25s ease;z-index:-1}
+  .row.active .row-btn::before{opacity:1}
+  .num{font:400 12px/1 var(--mono);color:var(--ink-num);letter-spacing:.04em;width:46px;flex:none}
+  .rt{flex:1;min-width:0}
+  .rt b{display:block;font-weight:500;font-size:clamp(19px,2.4vw,22px);line-height:1.25;letter-spacing:-.025em}
+  .rt span{display:block;font-size:14.5px;line-height:1.35;color:var(--ink-2);margin-top:2px}
+  .ic{position:relative;width:13px;height:13px;flex:none;margin-left:12px}
+  .ic::before,.ic::after{content:"";position:absolute;background:currentColor;border-radius:1px}
+  .ic::before{left:0;right:0;top:50%;height:1.75px;transform:translateY(-50%)}
+  .ic::after{top:0;bottom:0;left:50%;width:1.75px;transform:translateX(-50%);transition:transform .25s ease}
+  .row.active .ic::after{transform:translateX(-50%) scaleY(0)}
+  .row.active .row-btn{color:#fff}
+  .row.active .num{color:rgba(255,255,255,.92)}
+  .row.active .rt span{color:rgba(255,255,255,.86)}
+  .row-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line-card);border-radius:6px;padding:12px}
+  .media{position:relative;aspect-ratio:910/418;border-radius:4px;overflow:hidden;background:#cfd3d8}
+  .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s ease}
+  .badge{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:6px;height:28px;padding:0 11px;background:#fff;border-radius:4px;
+    font:500 11px/1 var(--mono);letter-spacing:.035em;text-transform:uppercase;white-space:nowrap}
+  .badge i{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .badge[hidden]{display:none}
+  .cbody{display:grid;gap:22px;padding:22px 12px 14px}
+  .ctitle{margin:0;font-weight:500;font-size:clamp(25px,3.4vw,32px);line-height:1.18;letter-spacing:-.035em}
+  .cpara{margin:10px 0 0;font-size:16px;line-height:1.6;color:var(--ink-2)}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;height:46px;border-radius:4px;font-weight:500;font-size:16px;letter-spacing:-.012em;white-space:nowrap}
+  .btn-primary{background:var(--btn);color:#fff;padding:0 18px 0 17px;gap:11px}
+  .btn-primary svg{width:15px;height:12.5px}
+  .btn-ghost{border:1.2px solid #15171B;padding:0 18px;background:#fff}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .cbody{display:flex;flex-direction:column;gap:0}
+  .cmain{display:contents}
+  .ctitle{order:1}.cpara{order:2}.specs{order:3;margin:18px 0 0;padding:0}.actions{order:4}
+  .spec{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px}
+  .spec + .spec{border-top:1px solid var(--line-spec)}
+  .spec dt{font:400 11px/1 var(--mono);letter-spacing:.045em;text-transform:uppercase;color:var(--ink-3)}
+  .spec dd{margin:0;font-size:15.5px;text-align:right}
+}
+/* Tablet landscape-ish: let the card fill the remaining height so nothing is left blank */
+@media (min-width:900px) and (max-width:1119.98px){
+  .card{height:100%}
+  .media{aspect-ratio:auto;flex:1;min-height:260px}
+}
+/* Phones & portrait tablets: accordion — the card lives inside the active row */
+@media (max-width:899.98px){
+  .svc-body{display:block}
+  .row .slot{display:none}
+  .row.active .slot{display:block;padding:12px 0 18px}
+  .row.active{border-bottom-color:var(--line)}
+  .cbody{grid-template-columns:1fr}
+}
+@media (max-width:420px){
+  .actions .btn{flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<section class="svc" aria-labelledby="svc-title">
+  <div class="eyebrow"><i aria-hidden="true"></i>Services</div>
+
+  <header class="svc-head">
+    <h1 id="svc-title">One partner for every<br>leg of the journey</h1>
+    <p class="lede">Mix modes on a single booking — we plan the fastest, lowest-carbon or lowest-cost route and handle every handover in between.</p>
+  </header>
+
+  <div class="svc-body">
+    <ul class="list" role="list">
+      <li class="row active" data-i="0"><button class="row-btn" type="button" aria-expanded="true" aria-controls="svc-card"><span class="num">[01]</span><span class="rt"><b>Ocean freight</b><span>FCL &amp; LCL to 140+ ports</span></span><span class="ic" aria-hidden="true"></span></button><div class="slot"></div></li>
+      <li class="row" data-i="1"><button class="row-btn" type="button" aria-expanded="false" aria-controls="svc-card"><span class="num">[02]</span><span class="rt"><b>Air freight</b><span>Express and consolidated cargo</span></span><span class="ic" aria-hidden="true"></span></button><div class="slot"></div></li>
+      <li class="row" data-i="2"><button class="row-btn" type="button" aria-expanded="false" aria-controls="svc-card"><span class="num">[03]</span><span class="rt"><b>Rail &amp; intermodal</b><span>Cross-Canada and US corridors</span></span><span class="ic" aria-hidden="true"></span></button><div class="slot"></div></li>
+      <li class="row" data-i="3"><button class="row-btn" type="button" aria-expanded="false" aria-controls="svc-card"><span class="num">[04]</span><span class="rt"><b>Customs brokerage</b><span>CBSA clearance, duties &amp; CARM</span></span><span class="ic" aria-hidden="true"></span></button><div class="slot"></div></li>
+      <li class="row" data-i="4"><button class="row-btn" type="button" aria-expanded="false" aria-controls="svc-card"><span class="num">[05]</span><span class="rt"><b>Warehousing</b><span>Storage, pick-pack &amp; cross-dock</span></span><span class="ic" aria-hidden="true"></span></button><div class="slot"></div></li>
+    </ul>
+
+    <article class="card" id="svc-card" aria-live="polite">
+      <div class="media">
+        <img id="svc-img" src="assets/image-01.webp" alt="Container ships stacked with containers berthed under ship-to-shore cranes at a port terminal" width="1851" height="849" decoding="async">
+        <span class="badge" id="svc-badge"><i aria-hidden="true"></i>Most booked service</span>
+      </div>
+      <div class="cbody">
+        <div class="cmain">
+          <h2 class="ctitle" id="svc-ctitle">Ocean freight — FCL &amp; LCL</h2>
+          <p class="cpara" id="svc-cpara">Full and shared container loads on weekly sailings from Vancouver, Montréal and Halifax, with door-to-door options and reefer capacity for temperature-sensitive cargo.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#book" id="svc-cta"><span id="svc-cta-t">Book ocean freight</span><svg viewBox="0 0 15 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 6.25h12.6M8.6 1.2l5.05 5.05L8.6 11.3"/></svg></a>
+            <a class="btn btn-ghost" href="#lanes" id="svc-cta2">View lanes</a>
+          </div>
+        </div>
+        <dl class="specs" id="svc-specs">
+          <div class="spec"><dt>Transit time</dt><dd>9 – 24 days</dd></div>
+          <div class="spec"><dt>Coverage</dt><dd>140+ ports, 6 continents</dd></div>
+          <div class="spec"><dt>Equipment</dt><dd>20’ · 40’ · 40’ HC · Reefer</dd></div>
+        </dl>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+(()=>{
+  const S=[
+    {t:"Ocean freight — FCL & LCL",p:"Full and shared container loads on weekly sailings from Vancouver, Montréal and Halifax, with door-to-door options and reefer capacity for temperature-sensitive cargo.",
+     cta:"Book ocean freight",cta2:"View lanes",badge:true,pos:"50% 50%",
+     s:[["Transit time","9 – 24 days"],["Coverage","140+ ports, 6 continents"],["Equipment","20' · 40' · 40' HC · Reefer"]]},
+    {t:"Air freight — Express & consolidated",p:"Next-flight-out, deferred and consolidated air cargo from YVR, YYZ and YUL, with dangerous-goods handling and time-definite delivery at destination.",
+     cta:"Book air freight",cta2:"View routes",badge:false,pos:"30% 40%",
+     s:[["Transit time","1 – 5 days"],["Coverage","220+ airports"],["Equipment","ULD · PMC · Loose"]]},
+    {t:"Rail & intermodal — Coast to coast",p:"Domestic and cross-border rail with first- and last-mile drayage, linking ports and inland terminals across Canada and the US Midwest.",
+     cta:"Book rail freight",cta2:"View corridors",badge:false,pos:"70% 55%",
+     s:[["Transit time","3 – 9 days"],["Coverage","Canada & US corridors"],["Equipment","53’ · 40’ HC · Reefer"]]},
+    {t:"Customs brokerage — CBSA & CARM",p:"Licensed brokers handle classification, duties and release so your freight clears at the border without holds, storage charges or surprises.",
+     cta:"Start clearance",cta2:"View services",badge:false,pos:"85% 45%",
+     s:[["Release time","Same day"],["Coverage","All CBSA ports"],["Programs","CARM · PARS · RMD"]]},
+    {t:"Warehousing — Store, pick & ship",p:"Bonded and general storage near major gateways, with pick-pack, kitting and cross-dock so inventory moves the day it lands.",
+     cta:"Request space",cta2:"View sites",badge:false,pos:"15% 60%",
+     s:[["Lead time","24 hours"],["Footprint","1.2M sq ft"],["Services","Pick-pack · Kitting · X-dock"]]}
+  ];
+  const $=id=>document.getElementById(id);
+  const rows=[...document.querySelectorAll('.row')];
+  const card=$('svc-card'), body=document.querySelector('.svc-body');
+  const mq=matchMedia('(max-width:899.98px)');
+  let cur=0;
+  function place(){
+    if(mq.matches){rows[cur].querySelector('.slot').appendChild(card)}
+    else if(card.parentElement!==body){body.appendChild(card)}
+  }
+  function render(i){
+    const d=S[i];
+    $('svc-ctitle').textContent=d.t;$('svc-cpara').textContent=d.p;
+    $('svc-cta-t').textContent=d.cta;$('svc-cta2').textContent=d.cta2;
+    $('svc-badge').hidden=!d.badge;
+    const img=$('svc-img');img.style.objectPosition=d.pos;
+    $('svc-specs').innerHTML=d.s.map(([k,v])=>`<div class="spec"><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+  }
+  function select(i){
+    if(i===cur && !mq.matches) return;
+    if(i===cur && mq.matches){ /* accordion: collapse/expand */
+      const open=rows[i].classList.toggle('active');rows[i].querySelector('.row-btn').setAttribute('aria-expanded',open);return;}
+    rows.forEach((r,k)=>{r.classList.toggle('active',k===i);r.querySelector('.row-btn').setAttribute('aria-expanded',k===i)});
+    cur=i;render(i);place();
+  }
+  rows.forEach((r,k)=>r.querySelector('.row-btn').addEventListener('click',()=>select(k)));
+  document.querySelector('.list').addEventListener('keydown',e=>{
+    if(!['ArrowDown','ArrowUp','Home','End'].includes(e.key))return;
+    e.preventDefault();
+    const btns=rows.map(r=>r.querySelector('.row-btn'));let k=btns.indexOf(document.activeElement);
+    k=e.key==='Home'?0:e.key==='End'?btns.length-1:(k+(e.key==='ArrowDown'?1:-1)+btns.length)%btns.length;
+    btns[k].focus();
+  });
+  mq.addEventListener('change',()=>{rows.forEach((r,k)=>r.classList.toggle('active',k===cur));place()});
+  place();
+})();
+</script>
+</body>
+</html>
